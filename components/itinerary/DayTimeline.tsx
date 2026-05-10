@@ -190,7 +190,7 @@ export default function DayTimeline({ tripId, initialStops }: DayTimelineProps) 
                                   {activity.cost != null && (
                                     <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
                                       <DollarSign className="w-3.5 h-3.5 text-gray-400" />
-                                      {activity.cost.toLocaleString()}
+                                      ₹{activity.cost.toLocaleString()}
                                     </div>
                                   )}
                                 </div>

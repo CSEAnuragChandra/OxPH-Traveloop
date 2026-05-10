@@ -136,7 +136,7 @@ export default function TripCard({
           {totalBudget != null && (
             <div className="flex items-center gap-2">
               <Wallet className="w-4 h-4 text-orange-500 shrink-0" />
-              <span>Budget: ${totalBudget.toLocaleString()}</span>
+              <span>Budget: ₹{totalBudget.toLocaleString()}</span>
             </div>
           )}
         </div>

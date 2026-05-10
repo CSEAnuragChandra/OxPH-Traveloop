@@ -89,7 +89,7 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
             {trip.totalBudget && (
               <span className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full">
                 <Wallet className="w-4 h-4 text-orange-400" />
-                ${trip.totalBudget.toLocaleString()} Budget
+                ₹{trip.totalBudget.toLocaleString()} Budget
               </span>
             )}
           </div>

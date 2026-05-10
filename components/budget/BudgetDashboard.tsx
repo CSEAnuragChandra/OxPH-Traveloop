@@ -74,14 +74,14 @@ export default function BudgetDashboard({ tripId, totalBudget, initialExpenses }
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
           <p className="text-sm font-medium text-gray-500 mb-1">Total Spent</p>
-          <h3 className="text-3xl font-bold text-gray-900">${totalSpent.toLocaleString()}</h3>
+          <h3 className="text-3xl font-bold text-gray-900">₹{totalSpent.toLocaleString()}</h3>
         </div>
         
         {totalBudget && (
           <>
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
               <p className="text-sm font-medium text-gray-500 mb-1">Total Budget</p>
-              <h3 className="text-3xl font-bold text-gray-900">${totalBudget.toLocaleString()}</h3>
+              <h3 className="text-3xl font-bold text-gray-900">₹{totalBudget.toLocaleString()}</h3>
             </div>
             <div className={`p-6 rounded-2xl border shadow-sm flex flex-col justify-center ${
               remaining !== null && remaining < 0 
@@ -92,7 +92,7 @@ export default function BudgetDashboard({ tripId, totalBudget, initialExpenses }
                 {remaining !== null && remaining < 0 ? "Over Budget" : "Remaining"}
               </p>
               <h3 className={`text-3xl font-bold ${remaining !== null && remaining < 0 ? "text-red-700" : "text-orange-700"}`}>
-                ${Math.abs(remaining || 0).toLocaleString()}
+                ₹{Math.abs(remaining || 0).toLocaleString()}
               </h3>
             </div>
           </>
@@ -148,7 +148,7 @@ export default function BudgetDashboard({ tripId, totalBudget, initialExpenses }
                 <div className="space-y-1.5 col-span-2 md:col-span-1">
                   <Label>Amount</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₹</span>
                     <Input type="number" step="0.01" min="0" value={amount} onChange={(e) => setAmount(e.target.value)} className="pl-7" required />
                   </div>
                 </div>
@@ -193,7 +193,7 @@ export default function BudgetDashboard({ tripId, totalBudget, initialExpenses }
                         {expense.description || "-"}
                       </td>
                       <td className="px-4 py-3 text-right font-bold text-gray-900">
-                        ${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        ₹{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </td>
                       <td className="px-4 py-3 text-right whitespace-nowrap">
                         <button onClick={() => handleDelete(expense.id)} className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded-lg hover:bg-red-50">
@@ -233,7 +233,7 @@ export default function BudgetDashboard({ tripId, totalBudget, initialExpenses }
                     ))}
                   </Pie>
                   <Tooltip 
-                    formatter={(value: number) => `$${value.toLocaleString()}`}
+                    formatter={(value: number) => `₹${value.toLocaleString()}`}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   />
                   <Legend />

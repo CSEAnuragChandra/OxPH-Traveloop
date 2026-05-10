@@ -236,7 +236,7 @@ export default function ExplorePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3 text-xs font-medium text-gray-500">
                     <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{activity.duration}m</span>
-                    {activity.cost > 0 && <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" />{activity.cost}</span>}
+                    {activity.cost > 0 && <span className="flex items-center gap-1"><DollarSign className="w-3.5 h-3.5" />₹{activity.cost}</span>}
                     {activity.cost === 0 && <span className="text-green-600 font-semibold">Free</span>}
                   </div>
                   <Button

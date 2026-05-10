@@ -154,7 +154,7 @@ export default function StopSection({ stop, index, onDelete, onUpdate, onAddActi
                     </span>
                     <span className="flex-1 truncate font-medium">{act.title}</span>
                     {act.cost != null && (
-                      <span className="text-gray-500 shrink-0">${act.cost}</span>
+                      <span className="text-gray-500 shrink-0">₹{act.cost}</span>
                     )}
                     {act.duration != null && (
                       <span className="text-gray-400 shrink-0 text-xs">{act.duration}m</span>

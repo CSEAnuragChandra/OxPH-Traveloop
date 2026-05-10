@@ -188,7 +188,7 @@ export default async function SharedTripPage({ params }: { params: Promise<{ slu
                           {act.cost != null && act.cost > 0 && (
                             <span className="flex items-center gap-1">
                               <DollarSign className="w-3.5 h-3.5" />
-                              {act.cost.toLocaleString()}
+                              ₹{act.cost.toLocaleString()}
                             </span>
                           )}
                           {act.cost === 0 && (
