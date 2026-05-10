@@ -39,11 +39,10 @@ export default async function ProfilePage() {
 
   const upcomingTrips = await prisma.trip.findMany({
     where: {
-      userId,
       startDate: { gte: now },
+      OR: [{ userId }, { isPublic: true }],
     },
     orderBy: { startDate: "asc" },
-    take: 6,
     include: {
       stops: {
         orderBy: { orderIndex: "asc" },
@@ -55,11 +54,10 @@ export default async function ProfilePage() {
 
   const previousTrips = await prisma.trip.findMany({
     where: {
-      userId,
       endDate: { lt: now },
+      OR: [{ userId }, { isPublic: true }],
     },
     orderBy: { endDate: "desc" },
-    take: 6,
     include: {
       stops: {
         orderBy: { orderIndex: "asc" },

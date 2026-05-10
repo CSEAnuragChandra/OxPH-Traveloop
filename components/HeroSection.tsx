@@ -8,13 +8,20 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-const stats = [
+type HeroStat = {
+  value: string;
+  label: string;
+};
+
+const defaultStats: HeroStat[] = [
   { value: "50K+", label: "Trips planned" },
   { value: "120+", label: "Countries covered" },
   { value: "4.9★", label: "Average rating" },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ stats = defaultStats }: { stats?: HeroStat[] }) {
+  const statsToRender = stats.length ? stats : defaultStats;
+
   return (
     <section className="relative min-h-[95vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image */}
@@ -107,7 +114,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="mt-16 flex flex-wrap justify-center gap-8 sm:gap-12 items-center"
         >
-          {stats.map((stat, i) => (
+          {statsToRender.map((stat, i) => (
             <div key={i} className="text-center">
               <p className="text-3xl font-bold text-white">{stat.value}</p>
               <p className="text-sm text-white/60 mt-0.5">{stat.label}</p>

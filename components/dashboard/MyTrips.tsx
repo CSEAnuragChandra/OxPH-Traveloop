@@ -1,37 +1,27 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Users, MapPin, MoreHorizontal, Plus } from "lucide-react";
+import { Calendar, MapPin, MoreHorizontal, Plus, Route } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+type TripCard = {
+  id: string;
+  title: string;
+  destination: string;
+  dates: string;
+  stops: number;
+  status: "Upcoming" | "Ongoing" | "Completed";
+  image: string;
+};
 
-const trips = [
-  {
-    id: "trip-1",
-    title: "Summer in Santorini",
-    destination: "Santorini, Greece",
-    dates: "Aug 15 - Aug 22, 2026",
-    travelers: 4,
-    status: "Upcoming",
-    image:
-      "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?auto=format&fit=crop&w=800&q=80",
-    color: "bg-blue-500",
-  },
-  {
-    id: "trip-2",
-    title: "Tokyo Tech Conference",
-    destination: "Tokyo, Japan",
-    dates: "Oct 05 - Oct 12, 2026",
-    travelers: 2,
-    status: "Planning",
-    image:
-      "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80",
-    color: "bg-orange-500",
-  },
-];
+const statusColors: Record<TripCard["status"], string> = {
+  Upcoming: "bg-blue-500",
+  Ongoing: "bg-emerald-500",
+  Completed: "bg-gray-700",
+};
 
-export default function MyTrips() {
+export default function MyTrips({ trips = [] }: { trips?: TripCard[] }) {
   return (
     <section className="mb-16">
       <div className="flex justify-between items-end mb-6">
@@ -86,7 +76,7 @@ export default function MyTrips() {
               />
               <div className="absolute top-4 left-4">
                 <Badge
-                  className={`${trip.color} text-white border-none px-3 py-1 text-xs font-semibold`}
+                  className={`${statusColors[trip.status]} text-white border-none px-3 py-1 text-xs font-semibold`}
                 >
                   {trip.status}
                 </Badge>
@@ -113,8 +103,8 @@ export default function MyTrips() {
                   <span className="truncate">{trip.dates}</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
-                  <Users className="w-4 h-4 text-orange-500 mr-2" />
-                  <span>{trip.travelers} Travelers</span>
+                  <Route className="w-4 h-4 text-orange-500 mr-2" />
+                  <span>{trip.stops} Stops</span>
                 </div>
               </div>
             </div>
@@ -129,6 +119,11 @@ export default function MyTrips() {
             </div>
           </motion.div>
         ))}
+        {!trips.length && (
+          <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center text-gray-500">
+            No trips yet. Start planning to see your itineraries here.
+          </div>
+        )}
       </div>
     </section>
   );

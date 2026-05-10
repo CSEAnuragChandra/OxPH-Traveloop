@@ -32,7 +32,9 @@ export async function GET(req: NextRequest) {
   const now = new Date();
 
   const trips = await prisma.trip.findMany({
-    where: { userId: user.id },
+    where: {
+      OR: [{ userId: user.id }, { isPublic: true }],
+    },
     include: {
       stops: {
         select: { cityName: true, country: true },

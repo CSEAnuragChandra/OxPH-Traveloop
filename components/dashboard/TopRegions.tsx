@@ -4,46 +4,16 @@ import { motion } from "framer-motion";
 import { ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
 
-const regions = [
-  {
-    id: 1,
-    name: "Amalfi Coast",
-    country: "Italy",
-    image:
-      "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=80",
-    rating: 4.9,
-    tripsPlanned: "12k+",
-  },
-  {
-    id: 2,
-    name: "Kyoto",
-    country: "Japan",
-    image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
-    rating: 4.8,
-    tripsPlanned: "8k+",
-  },
-  {
-    id: 3,
-    name: "Swiss Alps",
-    country: "Switzerland",
-    image:
-      "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
-    rating: 4.9,
-    tripsPlanned: "5k+",
-  },
-  {
-    id: 4,
-    name: "Bali",
-    country: "Indonesia",
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
-    rating: 4.7,
-    tripsPlanned: "15k+",
-  },
-];
+type RegionCard = {
+  id: string;
+  name: string;
+  country: string;
+  image: string;
+  rating: number;
+  tripsPlanned: string;
+};
 
-export default function TopRegions() {
+export default function TopRegions({ regions = [] }: { regions?: RegionCard[] }) {
   return (
     <section className="mb-16">
       <div className="flex justify-between items-end mb-6">
@@ -105,6 +75,11 @@ export default function TopRegions() {
             </div>
           </motion.div>
         ))}
+        {!regions.length && (
+          <div className="col-span-full rounded-2xl border border-dashed border-gray-200 bg-white p-8 text-center text-gray-500">
+            We will highlight top regions as you add more trips.
+          </div>
+        )}
       </div>
       
       <div className="mt-6 md:hidden">
