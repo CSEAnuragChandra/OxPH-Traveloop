@@ -85,7 +85,7 @@ export default function Navbar() {
             Log in
           </Button>
           <Button className="bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-orange-300 transition-all duration-200 rounded-full px-5">
-            Get Started Free
+            Sign up
           </Button>
         </div>
 
