@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSession, signOut } from "next-auth/react";
 import {
   MapPin,
   Bell,
@@ -25,10 +25,61 @@ const navLinks = [
 ];
 
 export default function DashboardNavbar() {
-  const pathname = usePathname();
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const [profileName, setProfileName] = useState(
+    session?.user?.name || "Traveler"
+  );
+  const [profileEmail, setProfileEmail] = useState(session?.user?.email || "");
+  const [profileImage, setProfileImage] = useState(session?.user?.image || "");
+
+  useEffect(() => {
+    if (session?.user?.name) {
+      setProfileName(session.user.name);
+    }
+    if (session?.user?.email) {
+      setProfileEmail(session.user.email);
+    }
+    if (session?.user?.image) {
+      setProfileImage(session.user.image);
+    }
+  }, [session?.user?.name, session?.user?.email, session?.user?.image]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadProfile = async () => {
+      const response = await fetch("/api/profile", { method: "GET" });
+      if (!response.ok) {
+        return;
+      }
+
+      const result = await response.json().catch(() => null);
+      if (!result || !isMounted) {
+        return;
+      }
+
+      setProfileName(result.name || "Traveler");
+      setProfileEmail(result.email || "");
+      setProfileImage(result.image || "");
+    };
+
+    loadProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const userInitials = profileName
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
@@ -88,10 +139,17 @@ export default function DashboardNavbar() {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-400 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-orange-200 transition-all text-white font-bold text-sm"
               >
-                {session?.user?.image ? (
-                  <img src={session.user.image} alt={session.user.name ?? ""} className="w-full h-full object-cover" />
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt={profileName ?? "User avatar"}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
                 ) : (
-                  <span>{session?.user?.name?.[0]?.toUpperCase() ?? <User className="w-4 h-4" />}</span>
+                  <span className="text-sm font-semibold text-gray-600">
+                    {userInitials || <User className="w-4 h-4" />}
+                  </span>
                 )}
               </button>
 
@@ -105,14 +163,21 @@ export default function DashboardNavbar() {
                     className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
                   >
                     <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                      <p className="text-sm font-medium text-gray-900 truncate">{session?.user?.name ?? "Traveler"}</p>
-                      <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {profileName}
+                      </p>
+                      {profileEmail ? (
+                        <p className="text-xs text-gray-500 truncate">{profileEmail}</p>
+                      ) : null}
                     </div>
                     <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
                     <div className="h-px bg-gray-100 my-1"></div>
-                    <button onClick={() => signOut({ callbackUrl: "/" })} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                    >
                       <LogOut className="w-4 h-4" /> Sign out
                     </button>
                   </motion.div>
