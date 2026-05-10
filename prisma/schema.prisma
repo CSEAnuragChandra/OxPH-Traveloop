@@ -4,8 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // This should map to your local Docker database connection string
-
 }
 
 // ==============================================================================
