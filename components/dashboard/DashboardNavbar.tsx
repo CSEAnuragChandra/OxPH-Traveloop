@@ -158,7 +158,7 @@ export default function DashboardNavbar() {
                 </Link>
               ))}
               <div className="h-px bg-gray-100 my-2"></div>
-              <Link href="/plan">
+              <Link href="/trips/new">
                 <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-full">
                   Plan a Trip
                 </Button>
