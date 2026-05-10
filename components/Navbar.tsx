@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { MapPin, Menu, X } from "lucide-react";
@@ -63,6 +64,14 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href="/profile"
+            className={`text-sm font-semibold transition-colors hover:text-orange-500 ${
+              scrolled ? "text-gray-700" : "text-white"
+            }`}
+          >
+            Profile
+          </Link>
         </nav>
 
         {/* CTA Buttons */}
@@ -122,6 +131,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href="/profile"
+              onClick={() => setMenuOpen(false)}
+              className="text-gray-900 font-semibold hover:text-orange-500 transition-colors"
+            >
+              Profile
+            </Link>
             <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
               <Link
                 href="/auth/signin"
