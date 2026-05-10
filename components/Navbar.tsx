@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { MapPin, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 flex items-center justify-center shadow-md group-hover:shadow-orange-300 transition-shadow">
             <MapPin className="w-5 h-5 text-white" />
           </div>
@@ -46,7 +47,7 @@ export default function Navbar() {
           >
             Traveloop
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
@@ -61,6 +62,14 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href="/profile"
+            className={`text-sm font-semibold transition-colors hover:text-orange-500 ${
+              scrolled ? "text-gray-700" : "text-white"
+            }`}
+          >
+            Profile
+          </Link>
         </nav>
 
         {/* CTA Buttons */}
@@ -111,6 +120,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href="/profile"
+              onClick={() => setMenuOpen(false)}
+              className="text-gray-900 font-semibold hover:text-orange-500 transition-colors"
+            >
+              Profile
+            </Link>
             <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
               <Button variant="outline" className="w-full">
                 Log in
