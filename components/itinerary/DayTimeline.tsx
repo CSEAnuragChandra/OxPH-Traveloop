@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { motion } from "framer-motion";
-import { MapPin, Calendar, GripVertical, Clock, DollarSign } from "lucide-react";
+import { MapPin, Calendar, GripVertical, Clock, IndianRupee } from "lucide-react";
 
 interface Activity {
   id: string;
@@ -189,7 +189,7 @@ export default function DayTimeline({ tripId, initialStops }: DayTimelineProps) 
                                   )}
                                   {activity.cost != null && (
                                     <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
-                                      <DollarSign className="w-3.5 h-3.5 text-gray-400" />
+                                      <IndianRupee className="w-3.5 h-3.5 text-gray-400" />
                                       ₹{activity.cost.toLocaleString()}
                                     </div>
                                   )}

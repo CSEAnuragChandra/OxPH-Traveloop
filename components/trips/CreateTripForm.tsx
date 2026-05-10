@@ -198,10 +198,10 @@ export default function CreateTripForm() {
           <div className="space-y-2">
             <Label htmlFor="totalBudget" className="flex items-center gap-2 text-sm font-semibold text-gray-700">
               <Wallet className="w-4 h-4 text-orange-500" />
-              Estimated Budget (USD) <span className="text-gray-400 font-normal">(optional)</span>
+              Estimated Budget (INR) <span className="text-gray-400 font-normal">(optional)</span>
             </Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium">₹</span>
               <Input
                 id="totalBudget"
                 type="number"

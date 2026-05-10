@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { GripVertical, Pencil, Trash2, Clock, DollarSign, Tag } from "lucide-react";
+import { GripVertical, Pencil, Trash2, Clock, IndianRupee, Tag } from "lucide-react";
 import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 export interface ActivityItemData {
@@ -83,7 +83,7 @@ export default function ActivityItem({
         )}
         {activity.cost != null && (
           <span className="flex items-center gap-1 font-medium text-gray-600">
-            <DollarSign className="w-3 h-3" />
+            <IndianRupee className="w-3 h-3" />
             {activity.cost.toLocaleString()}
           </span>
         )}

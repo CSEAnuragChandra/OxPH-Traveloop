@@ -152,9 +152,9 @@ export default function AddActivityModal({
               {/* Cost & Duration */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <Label htmlFor="act-cost">Cost (USD) <span className="text-gray-400 font-normal">(optional)</span></Label>
+                  <Label htmlFor="act-cost">Cost (INR) <span className="text-gray-400 font-normal">(optional)</span></Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">₹</span>
                     <Input
                       id="act-cost"
                       type="number"
