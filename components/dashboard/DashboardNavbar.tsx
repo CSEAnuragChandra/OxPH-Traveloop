@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession, signOut } from "next-auth/react";
 import {
   MapPin,
   Bell,
@@ -25,6 +26,7 @@ const navLinks = [
 
 export default function DashboardNavbar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
@@ -84,13 +86,13 @@ export default function DashboardNavbar() {
             <div className="relative">
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-orange-200 transition-all"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-400 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-orange-200 transition-all text-white font-bold text-sm"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&h=64&q=80"
-                  alt="User avatar"
-                  className="w-full h-full object-cover"
-                />
+                {session?.user?.image ? (
+                  <img src={session.user.image} alt={session.user.name ?? ""} className="w-full h-full object-cover" />
+                ) : (
+                  <span>{session?.user?.name?.[0]?.toUpperCase() ?? <User className="w-4 h-4" />}</span>
+                )}
               </button>
 
               <AnimatePresence>
@@ -103,17 +105,14 @@ export default function DashboardNavbar() {
                     className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
                   >
                     <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                      <p className="text-sm font-medium text-gray-900">Alex Walker</p>
-                      <p className="text-xs text-gray-500">alex@example.com</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">{session?.user?.name ?? "Traveler"}</p>
+                      <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
                     </div>
                     <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
-                    <Link href="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                      <Settings className="w-4 h-4" /> Settings
-                    </Link>
                     <div className="h-px bg-gray-100 my-1"></div>
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
+                    <button onClick={() => signOut({ callbackUrl: "/" })} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
                       <LogOut className="w-4 h-4" /> Sign out
                     </button>
                   </motion.div>
