@@ -16,12 +16,17 @@ interface Trip {
   totalBudget?: number | null;
   coverPhoto?: string | null;
   stops: any[];
+  isPublic: boolean;
+  publicSlug?: string | null;
 }
 
 export default function ItineraryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: tripId } = use(params);
   const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(true);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const [shareUrl, setShareUrl] = useState<string>("");
 
   useEffect(() => {
     async function load() {
@@ -34,6 +39,48 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
     }
     load();
   }, [tripId]);
+
+  useEffect(() => {
+    if (!trip?.isPublic || !trip.publicSlug) {
+      setShareUrl("");
+      return;
+    }
+    setShareUrl(`${window.location.origin}/share/${trip.publicSlug}`);
+  }, [trip?.isPublic, trip?.publicSlug]);
+
+  const toggleShare = async () => {
+    if (!trip) return;
+    setShareLoading(true);
+    setShareNotice(null);
+    try {
+      const res = await fetch(`/api/trips/${tripId}/share`, { method: "PUT" });
+      if (!res.ok) throw new Error("Unable to update sharing");
+      const data = await res.json();
+      setTrip((prev) =>
+        prev
+          ? {
+              ...prev,
+              isPublic: Boolean(data.isPublic),
+              publicSlug: data.publicSlug,
+            }
+          : prev
+      );
+    } catch (error) {
+      setShareNotice("Unable to update sharing. Please try again.");
+    } finally {
+      setShareLoading(false);
+    }
+  };
+
+  const copyShareLink = async () => {
+    if (!trip?.publicSlug) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareNotice("Share link copied.");
+    } catch (error) {
+      setShareNotice("Unable to copy link. Please copy it manually.");
+    }
+  };
 
   if (loading) {
     return (
@@ -156,6 +203,57 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
                     <span className="text-xs bg-white shadow-sm px-2 py-1 rounded font-bold text-gray-500">View</span>
                   </div>
                 </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Share this trip</h3>
+              <p className="text-sm text-gray-500 mb-4">
+                Create a read-only link so others can view this itinerary.
+              </p>
+              <div className="space-y-3">
+                <Button
+                  onClick={toggleShare}
+                  disabled={shareLoading}
+                  className={`w-full ${
+                    trip.isPublic
+                      ? "bg-gray-900 hover:bg-gray-800 text-white"
+                      : "bg-orange-500 hover:bg-orange-600 text-white"
+                  } rounded-full`}
+                >
+                  {shareLoading
+                    ? "Updating..."
+                    : trip.isPublic
+                    ? "Disable sharing"
+                    : "Enable sharing"}
+                </Button>
+
+                {trip.isPublic && trip.publicSlug ? (
+                  <div className="rounded-2xl border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="truncate">
+                        {shareUrl}
+                      </span>
+                      <button
+                        onClick={copyShareLink}
+                        className="text-orange-600 font-semibold hover:text-orange-700"
+                        type="button"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <Link
+                      href={`/share/${trip.publicSlug}`}
+                      className="mt-2 inline-flex text-xs font-semibold text-orange-600 hover:text-orange-700"
+                    >
+                      Open read-only view →
+                    </Link>
+                  </div>
+                ) : null}
+
+                {shareNotice ? (
+                  <p className="text-xs text-gray-500">{shareNotice}</p>
+                ) : null}
               </div>
             </div>
           </div>
