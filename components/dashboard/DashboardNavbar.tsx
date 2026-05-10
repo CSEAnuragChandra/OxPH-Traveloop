@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: "My Trips", href: "/home" },
+  { name: "My Trips", href: "/trips" },
   { name: "Explore", href: "/explore" },
   { name: "Community", href: "/community" },
 ];
@@ -73,7 +73,7 @@ export default function DashboardNavbar() {
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
             
-            <Link href="/plan">
+            <Link href="/trips/new">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 flex items-center gap-2 shadow-sm shadow-orange-200">
                 <Plus className="w-4 h-4" />
                 <span>Plan a Trip</span>
