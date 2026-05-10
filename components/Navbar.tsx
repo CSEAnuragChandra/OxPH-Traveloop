@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { MapPin, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -35,7 +37,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 flex items-center justify-center shadow-md group-hover:shadow-orange-300 transition-shadow">
             <MapPin className="w-5 h-5 text-white" />
           </div>
@@ -46,7 +48,7 @@ export default function Navbar() {
           >
             Traveloop
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
@@ -61,23 +63,40 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href="/profile"
+            className={`text-sm font-semibold transition-colors hover:text-orange-500 ${
+              scrolled ? "text-gray-700" : "text-white"
+            }`}
+          >
+            Profile
+          </Link>
         </nav>
 
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Button
-            variant="ghost"
-            className={`text-sm font-medium transition-colors ${
-              scrolled
-                ? "text-gray-700 hover:text-orange-500"
-                : "text-white hover:text-orange-300"
-            }`}
+          <Link
+            href="/auth/signin"
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              `text-sm font-medium transition-colors ${
+                scrolled
+                  ? "text-gray-700 hover:text-orange-500"
+                  : "text-white hover:text-orange-300"
+              }`
+            )}
           >
             Log in
-          </Button>
-          <Button className="bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-orange-300 transition-all duration-200 rounded-full px-5">
-            Get Started Free
-          </Button>
+          </Link>
+          <Link
+            href="/auth/signup"
+            className={cn(
+              buttonVariants(),
+              "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 shadow-md hover:shadow-orange-300 transition-all duration-200 rounded-full px-5"
+            )}
+          >
+            Sign up
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -111,13 +130,29 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <Link
+              href="/profile"
+              onClick={() => setMenuOpen(false)}
+              className="text-gray-900 font-semibold hover:text-orange-500 transition-colors"
+            >
+              Profile
+            </Link>
             <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-              <Button variant="outline" className="w-full">
+              <Link
+                href="/auth/signin"
+                className={cn(buttonVariants({ variant: "outline" }), "w-full")}
+              >
                 Log in
-              </Button>
-              <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full">
+              </Link>
+              <Link
+                href="/auth/signup"
+                className={cn(
+                  buttonVariants(),
+                  "w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full"
+                )}
+              >
                 Get Started Free
-              </Button>
+              </Link>
             </div>
           </nav>
         </motion.div>

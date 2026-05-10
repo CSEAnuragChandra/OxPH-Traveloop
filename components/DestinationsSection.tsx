@@ -5,46 +5,21 @@ import Image from "next/image";
 import { Star, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-const destinations = [
-  {
-    name: "Santorini",
-    country: "Greece",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80",
-    rating: 4.9,
-    tag: "Trending",
-    trips: "2.1K trips",
-    tagColor: "bg-orange-500",
-  },
-  {
-    name: "Kyoto",
-    country: "Japan",
-    image: "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80",
-    rating: 4.8,
-    tag: "Cultural",
-    trips: "1.8K trips",
-    tagColor: "bg-violet-500",
-  },
-  {
-    name: "Patagonia",
-    country: "Argentina",
-    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=80",
-    rating: 4.9,
-    tag: "Adventure",
-    trips: "980 trips",
-    tagColor: "bg-teal-500",
-  },
-  {
-    name: "Amalfi Coast",
-    country: "Italy",
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80",
-    rating: 4.7,
-    tag: "Scenic",
-    trips: "1.4K trips",
-    tagColor: "bg-pink-500",
-  },
-];
+type DestinationCard = {
+  name: string;
+  country: string;
+  image: string;
+  rating: number;
+  tag: string;
+  trips: string;
+  tagColor: string;
+};
 
-export default function DestinationsSection() {
+export default function DestinationsSection({
+  destinations = [],
+}: {
+  destinations?: DestinationCard[];
+}) {
   return (
     <section id="destinations" className="py-28 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
@@ -129,6 +104,11 @@ export default function DestinationsSection() {
               </div>
             </motion.div>
           ))}
+          {!destinations.length && (
+            <div className="col-span-full rounded-2xl border border-dashed border-gray-200 bg-white p-10 text-center text-gray-500">
+              Destinations will appear here once trips are published.
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import bcrypt from "bcrypt";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
@@ -13,16 +14,35 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // This is a placeholder. Implement your own logic here.
-        // You should validate credentials against your database
-        if (credentials?.email === "test@example.com" && credentials?.password === "password") {
+        try {
+          const email = credentials?.email?.trim().toLowerCase();
+          const password = credentials?.password ?? "";
+
+          if (!email || !password) {
+            return null;
+          }
+
+          const user = await prisma.user.findUnique({ where: { email } });
+
+          if (!user?.passwordHash || !user.email) {
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(password, user.passwordHash);
+
+          if (!isValid) {
+            return null;
+          }
+
           return {
-            id: "1",
-            email: credentials.email,
-            name: "Test User",
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
           };
+        } catch (error) {
+          return null;
         }
-        return null;
       },
     }),
     // Add more providers here (GitHub, Google, etc.)
@@ -36,12 +56,18 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = (user as { image?: string | null }).image ?? null;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id as string;
+        session.user.name = (token.name as string | undefined) ?? session.user.name;
+        session.user.email = (token.email as string | undefined) ?? session.user.email;
+        session.user.image = (token.image as string | null | undefined) ?? session.user.image;
       }
       return session;
     },

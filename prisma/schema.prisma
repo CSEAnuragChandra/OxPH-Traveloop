@@ -43,11 +43,13 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  passwordHash  String?
   languagePref  String?   @default("en") // User Profile / Settings
   
   accounts      Account[]
   sessions      Session[]
   trips         Trip[]    // One-to-many relationship with Trips
+  resetTokens   PasswordResetToken[]
 }
 
 model VerificationToken {
@@ -56,6 +58,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  slug      String?  @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ==============================================================================

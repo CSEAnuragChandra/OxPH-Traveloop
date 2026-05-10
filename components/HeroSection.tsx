@@ -2,19 +2,28 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Search, MapPin, Calendar, ArrowRight, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
-const stats = [
+type HeroStat = {
+  value: string;
+  label: string;
+};
+
+const defaultStats: HeroStat[] = [
   { value: "50K+", label: "Trips planned" },
   { value: "120+", label: "Countries covered" },
   { value: "4.9★", label: "Average rating" },
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ stats = defaultStats }: { stats?: HeroStat[] }) {
+  const statsToRender = stats.length ? stats : defaultStats;
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative min-h-[95vh] flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -76,21 +85,26 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-10 flex flex-col sm:flex-row gap-4 items-center"
         >
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-full px-8 py-6 text-base shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 group"
+          <Link
+            href="/auth/signup"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-full px-8 py-6 text-base shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 transition-all duration-300 group"
+            )}
           >
             Start Planning for Free
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
-          <Button
-            size="lg"
-            variant="ghost"
-            className="text-white border border-white/30 hover:bg-white/10 rounded-full px-8 py-6 text-base backdrop-blur-sm group"
+          </Link>
+          <Link
+            href="#how-it-works"
+            className={cn(
+              buttonVariants({ size: "lg", variant: "ghost" }),
+              "text-white border border-white/30 hover:bg-white/10 rounded-full px-8 py-6 text-base backdrop-blur-sm group"
+            )}
           >
             <Play className="mr-2 w-4 h-4 fill-white group-hover:scale-110 transition-transform" />
             Watch Demo
-          </Button>
+          </Link>
         </motion.div>
 
         {/* Stats Row */}
@@ -98,9 +112,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="mt-16 flex gap-12 items-center"
+          className="mt-16 flex flex-wrap justify-center gap-8 sm:gap-12 items-center"
         >
-          {stats.map((stat, i) => (
+          {statsToRender.map((stat, i) => (
             <div key={i} className="text-center">
               <p className="text-3xl font-bold text-white">{stat.value}</p>
               <p className="text-sm text-white/60 mt-0.5">{stat.label}</p>
@@ -115,7 +129,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.85 }}
           className="mt-12 w-full max-w-3xl"
         >
-          <div className="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2">
+          <div className="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-2xl shadow-black/20">
             <div className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3 flex-1 min-w-0">
               <MapPin className="w-5 h-5 text-orange-300 shrink-0" />
               <input
@@ -132,10 +146,16 @@ export default function HeroSection() {
                 className="bg-transparent text-white placeholder:text-white/50 outline-none text-sm flex-1 min-w-0"
               />
             </div>
-            <Button className="bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl px-6 py-3 shrink-0 hover:from-orange-600 hover:to-amber-600 shadow-lg transition-all">
+            <Link
+              href="#destinations"
+              className={cn(
+                buttonVariants(),
+                "bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl px-6 py-3 shrink-0 hover:from-orange-600 hover:to-amber-600 shadow-lg transition-all"
+              )}
+            >
               <Search className="w-5 h-5" />
               <span className="ml-2 hidden sm:inline font-medium">Explore</span>
-            </Button>
+            </Link>
           </div>
         </motion.div>
       </div>

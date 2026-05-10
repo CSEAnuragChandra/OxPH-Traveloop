@@ -3,16 +3,31 @@
 import { MapPin, MessageCircle, Camera, Briefcase, Code2 } from "lucide-react";
 
 const links = {
-  Product: ["Features", "Destinations", "How it works", "Pricing"],
-  Company: ["About", "Blog", "Careers", "Press"],
-  Support: ["Help Center", "Community", "Privacy Policy", "Terms of Service"],
+  Product: [
+    { label: "Features", href: "#features" },
+    { label: "Destinations", href: "#destinations" },
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Pricing", href: "/auth/signup" },
+  ],
+  Company: [
+    { label: "About", href: "/" },
+    { label: "Blog", href: "/" },
+    { label: "Careers", href: "/" },
+    { label: "Press", href: "/" },
+  ],
+  Support: [
+    { label: "Help Center", href: "/" },
+    { label: "Community", href: "#community" },
+    { label: "Privacy Policy", href: "/" },
+    { label: "Terms of Service", href: "/" },
+  ],
 };
 
 const socials = [
-  { icon: MessageCircle, label: "Twitter" },
-  { icon: Camera, label: "Instagram" },
-  { icon: Briefcase, label: "LinkedIn" },
-  { icon: Code2, label: "GitHub" },
+  { icon: MessageCircle, label: "Twitter", href: "https://x.com" },
+  { icon: Camera, label: "Instagram", href: "https://instagram.com" },
+  { icon: Briefcase, label: "LinkedIn", href: "https://linkedin.com" },
+  { icon: Code2, label: "GitHub", href: "https://github.com" },
 ];
 
 export default function Footer() {
@@ -40,8 +55,10 @@ export default function Footer() {
                 return (
                   <a
                     key={s.label}
-                    href="#"
+                    href={s.href}
                     aria-label={s.label}
+                    target="_blank"
+                    rel="noreferrer"
                     className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-orange-500 flex items-center justify-center transition-colors duration-200"
                   >
                     <Icon className="w-4 h-4 text-gray-400 hover:text-white" />
@@ -57,12 +74,12 @@ export default function Footer() {
               <h4 className="text-white font-semibold text-sm mb-4">{group}</h4>
               <ul className="space-y-3">
                 {items.map((item) => (
-                  <li key={item}>
+                  <li key={item.label}>
                     <a
-                      href="#"
+                      href={item.href}
                       className="text-sm hover:text-orange-400 transition-colors"
                     >
-                      {item}
+                      {item.label}
                     </a>
                   </li>
                 ))}
