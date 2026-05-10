@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Traveloop
+
+Traveloop is a modern travel planning platform built with Next.js, Prisma, and PostgreSQL. It combines itinerary planning, budgeting, and collaboration with a polished UI for both public landing pages and authenticated dashboards.
+
+## Vercel Deployment
+
+- **Vercel Deployment Link:** [https://ox-ph-traveloop.vercel.app/]
+
+## Highlights
+
+- Dynamic landing page that reads destinations and trip stats from the database.
+- Full profile management with editable details and Cloudinary avatar uploads.
+- Trip management dashboard with upcoming, ongoing, and completed trips.
+- Prisma-backed API routes for authentication, profile updates, and trips.
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- Prisma ORM + PostgreSQL
+- NextAuth (Credentials provider)
+- Tailwind CSS + shadcn/ui
+- Framer Motion
+
+## Project Structure
+
+- `app/` - App Router pages and API routes
+- `components/` - UI building blocks and page sections
+- `lib/` - Auth helpers and Prisma client
+- `prisma/` - Schema and seed data
 
 ## Getting Started
 
-First, run the development server:
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Configure environment variables
+
+Create a `.env` file at the project root (if not already present) with values like:
+
+```
+DATABASE_URL=postgresql://...
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=replace-with-a-strong-secret
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+```
+
+### 3) Generate Prisma client
+
+```bash
+npx prisma generate
+```
+
+### 4) Seed the database (optional)
+
+```bash
+npx tsx prisma/seed.ts
+```
+
+### 5) Start the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Landing Page
 
-## Learn More
+- Hero stats and destination cards sourced from public trips.
+- Smooth animations and modern section layout.
 
-To learn more about Next.js, take a look at the following resources:
+### Dashboard
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Personalized trip cards from the signed-in user and public trips.
+- Top regional selections derived from trip stops.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Profile
 
-## Deploy on Vercel
+- Edit profile details and language preferences.
+- Upload profile photo to Cloudinary and persist in the database.
+- Change password flow for credentials-based accounts.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - start the development server
+- `npm run build` - production build
+- `npm run start` - start production server
+- `npm run lint` - lint the codebase
+
+
