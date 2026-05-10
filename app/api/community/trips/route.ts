@@ -18,14 +18,20 @@ export async function GET(req: NextRequest) {
           }
         : {}),
     },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      coverPhoto: true,
+      startDate: true,
+      endDate: true,
+      publicSlug: true,
       user: { select: { name: true, image: true } },
       stops: {
         orderBy: { orderIndex: "asc" },
         take: 3,
         select: { cityName: true },
       },
-      _count: { select: { stops: true, activities: false } },
     },
     orderBy: { createdAt: "desc" },
     take: 50,

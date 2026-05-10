@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, MapPin, ArrowRight, Loader2, Check } from "lucide-react";
+import toast from "react-hot-toast";
 
 const signUpSchema = z.object({
   name: z.string().min(1, "Name is required").max(80).optional(),
@@ -26,7 +27,6 @@ const PERKS = [
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,7 +40,6 @@ export default function SignUpPage() {
   });
 
   const onSubmit = async (values: SignUpValues) => {
-    setFormError(null);
     setIsSubmitting(true);
     try {
       const response = await fetch("/api/auth/signup", {
@@ -51,7 +50,7 @@ export default function SignUpPage() {
 
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
-        setFormError(payload?.error || "Unable to create your account.");
+        toast.error(payload?.error || "Unable to create your account.");
         return;
       }
 
@@ -68,7 +67,7 @@ export default function SignUpPage() {
       }
       router.push("/auth/signin");
     } catch {
-      setFormError("Unable to create your account right now. Please try again.");
+      toast.error("Unable to create your account right now. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -189,13 +188,6 @@ export default function SignUpPage() {
               </div>
               {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
             </div>
-
-            {/* Error */}
-            {formError && (
-              <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">
-                {formError}
-              </div>
-            )}
 
             {/* Submit */}
             <button

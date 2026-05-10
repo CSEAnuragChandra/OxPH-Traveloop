@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-provider";
 
@@ -26,7 +27,10 @@ export default function RootLayout({
       className={`${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <Toaster position="top-right" />
+        </AuthProvider>
       </body>
     </html>
   );

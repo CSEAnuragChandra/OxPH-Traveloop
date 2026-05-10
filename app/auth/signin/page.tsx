@@ -7,7 +7,8 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, MapPin, ArrowRight, Loader2 } from "lucide-react";
+import { MapPin, ArrowRight, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
@@ -20,9 +21,7 @@ type SignInValues = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
   const router = useRouter();
-  const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -34,7 +33,6 @@ export default function SignInPage() {
   });
 
   const onSubmit = async (values: SignInValues) => {
-    setFormError(null);
     setIsSubmitting(true);
     try {
       const response = await signIn("credentials", {
@@ -47,9 +45,9 @@ export default function SignInPage() {
         router.push(response.url);
         return;
       }
-      setFormError(response?.error ?? "Unable to sign in with those details.");
+      toast.error(response?.error ?? "Unable to sign in with those details.");
     } catch {
-      setFormError("Unable to sign in right now. Please try again.");
+      toast.error("Unable to sign in right now. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -147,13 +145,6 @@ export default function SignInPage() {
                 </Link>
               </div>
             </div>
-
-            {/* Error */}
-            {formError && (
-              <div className="px-4 py-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-600">
-                {formError}
-              </div>
-            )}
 
             {/* Submit */}
             <button

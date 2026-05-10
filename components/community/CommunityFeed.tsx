@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useDebounce } from "use-debounce";
-import { Search, MapPin, Calendar, Users, Copy, Eye, Loader2, Star } from "lucide-react";
+import { Search, MapPin, Calendar, Users, Copy, Eye, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
@@ -15,6 +15,7 @@ interface SharedTrip {
   coverPhoto?: string | null;
   startDate: string;
   endDate: string;
+  publicSlug?: string | null;
   user: { name?: string | null; image?: string | null };
   stops: { cityName: string }[];
 }
@@ -142,7 +143,12 @@ export default function CommunityFeed() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => router.push(`/trips/${trip.id}`)}
+                      onClick={() => {
+                        if (trip.publicSlug) {
+                          router.push(`/share/${trip.publicSlug}`);
+                        }
+                      }}
+                      disabled={!trip.publicSlug}
                       className="rounded-full text-xs h-8 border-gray-200 hover:border-orange-300 hover:text-orange-600"
                     >
                       <Eye className="w-3.5 h-3.5 mr-1" /> View
