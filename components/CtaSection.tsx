@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function CtaSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-white" id="cta">
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
@@ -40,13 +42,16 @@ export default function CtaSection() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button
-                size="lg"
-                className="bg-white text-orange-600 hover:bg-orange-50 font-bold rounded-full px-8 py-6 text-base shadow-xl hover:shadow-orange-200 transition-all duration-300 group"
+              <Link
+                href="/auth/signup"
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "bg-white text-orange-600 hover:bg-orange-50 font-bold rounded-full px-8 py-6 text-base shadow-xl hover:shadow-orange-200 transition-all duration-300 group"
+                )}
               >
                 Start planning for free
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              </Link>
               <p className="text-white/70 text-sm">
                 No credit card required · Free forever plan
               </p>
