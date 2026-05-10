@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // This should map to your local Docker database connection string
+
+}
+
+// ==============================================================================
+// NEXT-AUTH v4.24.13 MODELS
+// ==============================================================================
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  languagePref  String?   @default("en") // User Profile / Settings
+  
+  accounts      Account[]
+  sessions      Session[]
+  trips         Trip[]    // One-to-many relationship with Trips
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==============================================================================
+// TRAVELOOP DOMAIN MODELS
+// ==============================================================================
+
+model Trip {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  startDate     DateTime
+  endDate       DateTime
+  coverPhoto    String?
+  
+  // Visibility and Sharing
+  isPublic      Boolean   @default(false)
+  publicSlug    String?   @unique 
+
+  // Budget
+  totalBudget   Float?
+
+  // Relations
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  stops         Stop[]
+  expenses      Expense[]
+  checklist     ChecklistItem[]
+  notes         Note[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Stop {
+  id            String    @id @default(cuid())
+  cityName      String
+  country       String?
+  arrivalDate   DateTime
+  departureDate DateTime
+  orderIndex    Int       // Used to reorder the itinerary on the frontend
+
+  // Relations
+  tripId        String
+  trip          Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  
+  activities    Activity[]
+  notes         Note[]    // Allows notes specifically tied to a destination
+}
+
+model Activity {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  type        String    // e.g., 'Sightseeing', 'Food', 'Adventure'
+  cost        Float?
+  duration    Int?      // Duration in minutes to help with timeline UI
+
+  // Relations
+  stopId      String
+  stop        Stop      @relation(fields: [stopId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id          String    @id @default(cuid())
+  category    String    // e.g., 'Transport', 'Stay', 'Meals', 'Activities'
+  amount      Float
+  description String?
+  date        DateTime?
+
+  // Relations
+  tripId      String
+  trip        Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model ChecklistItem {
+  id          String    @id @default(cuid())
+  content     String
+  category    String?   // e.g., 'Clothing', 'Documents', 'Electronics'
+  isPacked    Boolean   @default(false)
+
+  // Relations
+  tripId      String
+  trip        Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id          String    @id @default(cuid())
+  content     String    @db.Text
+  date        DateTime  @default(now())
+
+  // Relations
+  tripId      String
+  trip        Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  // Optional relation to tie a note directly to a specific city/stop
+  stopId      String?
+  stop        Stop?     @relation(fields: [stopId], references: [id], onDelete: SetNull)
+}
