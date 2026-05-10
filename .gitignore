@@ -44,3 +44,16 @@ next-env.d.ts
 context/
 AGENTS.md
 CLAUDE.md
+
+# Editor & IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Turbopack
+.turbo/
