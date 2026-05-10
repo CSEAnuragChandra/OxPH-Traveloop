@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { name: "My Trips", href: "/home" },
+  { name: "My Trips", href: "/trips" },
   { name: "Explore", href: "/explore" },
   { name: "Community", href: "/community" },
 ];
@@ -126,7 +126,7 @@ export default function DashboardNavbar() {
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
             
-            <Link href="/plan">
+            <Link href="/trips/new">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 flex items-center gap-2 shadow-sm shadow-orange-200">
                 <Plus className="w-4 h-4" />
                 <span>Plan a Trip</span>
@@ -137,18 +137,18 @@ export default function DashboardNavbar() {
             <div className="relative">
               <button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
-                className="w-10 h-10 rounded-full bg-gray-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-orange-200 transition-all"
+                className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-400 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-orange-200 transition-all text-white font-bold text-sm"
               >
                 {profileImage ? (
                   <img
                     src={profileImage}
-                    alt="User avatar"
+                    alt={profileName ?? "User avatar"}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 ) : (
                   <span className="text-sm font-semibold text-gray-600">
-                    {userInitials}
+                    {userInitials || <User className="w-4 h-4" />}
                   </span>
                 )}
               </button>
@@ -163,21 +163,18 @@ export default function DashboardNavbar() {
                     className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
                   >
                     <div className="px-4 py-2 border-b border-gray-50 mb-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 truncate">
                         {profileName}
                       </p>
                       {profileEmail ? (
-                        <p className="text-xs text-gray-500">{profileEmail}</p>
+                        <p className="text-xs text-gray-500 truncate">{profileEmail}</p>
                       ) : null}
                     </div>
                     <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                       <User className="w-4 h-4" /> Profile
                     </Link>
-                    <Link href="/settings" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                      <Settings className="w-4 h-4" /> Settings
-                    </Link>
                     <div className="h-px bg-gray-100 my-1"></div>
-                    <button 
+                    <button
                       onClick={() => signOut({ callbackUrl: "/" })}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
                     >
@@ -225,7 +222,7 @@ export default function DashboardNavbar() {
                 </Link>
               ))}
               <div className="h-px bg-gray-100 my-2"></div>
-              <Link href="/plan">
+              <Link href="/trips/new">
                 <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white rounded-full">
                   Plan a Trip
                 </Button>

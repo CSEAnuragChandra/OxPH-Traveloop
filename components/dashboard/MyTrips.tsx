@@ -53,7 +53,7 @@ export default function MyTrips() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Create New Trip Card */}
-        <Link href="/plan" className="block">
+        <Link href="/trips/new" className="block">
           <motion.div
             whileHover={{ y: -5 }}
             className="h-full min-h-[300px] border-2 border-dashed border-gray-200 hover:border-orange-400 bg-gray-50/50 hover:bg-orange-50/50 rounded-2xl flex flex-col items-center justify-center p-6 text-center transition-all duration-300 cursor-pointer group"

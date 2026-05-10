@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import crypto from "crypto"
 import bcrypt from "bcrypt"
 
 import { prisma } from "@/lib/prisma"
@@ -8,7 +7,7 @@ import { prisma } from "@/lib/prisma"
 export const runtime = "nodejs"
 
 const resetSchema = z.object({
-  token: z.string().min(1, "Token is required"),
+  slug: z.string().min(1, "Slug is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 })
 
@@ -23,14 +22,9 @@ export async function POST(request: Request) {
     )
   }
 
-  const tokenHash = crypto
-    .createHash("sha256")
-    .update(parsed.data.token)
-    .digest("hex")
-
   const resetToken = await prisma.passwordResetToken.findFirst({
     where: {
-      tokenHash,
+      slug: parsed.data.slug,
       usedAt: null,
       expiresAt: { gt: new Date() },
     },

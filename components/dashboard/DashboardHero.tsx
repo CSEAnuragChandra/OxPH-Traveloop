@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { Search, MapPin, Calendar, Users, Filter, SortDesc } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 export default function DashboardHero() {
+  const { data: session } = useSession();
+  const firstName = session?.user?.name?.split(" ")[0] ?? "Traveler";
   return (
     <section className="relative w-full h-[400px] md:h-[450px] overflow-hidden rounded-b-[2.5rem] mb-12">
       {/* Background Image & Overlay */}
@@ -24,7 +27,7 @@ export default function DashboardHero() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
-            Where to next, Alex?
+            Where to next, {firstName}?
           </h1>
           <p className="text-gray-200 text-lg md:text-xl font-light mb-8 max-w-xl">
             Manage your itineraries, explore new destinations, and organize your adventures.

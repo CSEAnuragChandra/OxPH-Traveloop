@@ -1,27 +1,61 @@
-import nodemailer from "nodemailer"
-
-const smtpHost = process.env.BREVO_SMTP_HOST
-const smtpPort = Number(process.env.BREVO_SMTP_PORT || 587)
-const smtpUser = process.env.BREVO_SMTP_USER
-const smtpPass = process.env.BREVO_SMTP_PASS
+const brevoApiKey = process.env.BREVO_API_KEY
 const fromEmail = process.env.EMAIL_FROM
 const fromName = process.env.EMAIL_FROM_NAME || "Traveloop"
 
-if (!smtpHost || !smtpUser || !smtpPass || !fromEmail) {
+if (!brevoApiKey || !fromEmail) {
   throw new Error(
-    "Missing Brevo SMTP env vars. Set BREVO_SMTP_HOST, BREVO_SMTP_USER, BREVO_SMTP_PASS, EMAIL_FROM."
+    "Missing Brevo env vars. Set BREVO_API_KEY and EMAIL_FROM."
   )
 }
 
-export const mailer = nodemailer.createTransport({
-  host: smtpHost,
-  port: smtpPort,
-  secure: smtpPort === 465,
-  auth: {
-    user: smtpUser,
-    pass: smtpPass,
-  },
-})
+type MailAddress = {
+  name?: string
+  address: string
+}
+
+type SendMailParams = {
+  from: MailAddress
+  to: string | string[]
+  subject: string
+  text?: string
+  html?: string
+}
+
+export async function sendMail({
+  from,
+  to,
+  subject,
+  text,
+  html,
+}: SendMailParams) {
+  const recipients = Array.isArray(to) ? to : [to]
+  const payload = {
+    sender: {
+      name: from.name || fromName,
+      email: from.address,
+    },
+    to: recipients.map((email) => ({ email })),
+    subject,
+    textContent: text,
+    htmlContent: html,
+  }
+
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": brevoApiKey,
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    const errorBody = await response.text().catch(() => "")
+    throw new Error(
+      `Brevo send failed: ${response.status} ${response.statusText} ${errorBody}`
+    )
+  }
+}
 
 export function buildFromAddress() {
   return {

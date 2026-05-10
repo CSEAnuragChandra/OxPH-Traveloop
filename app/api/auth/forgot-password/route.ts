@@ -3,7 +3,7 @@ import { z } from "zod"
 import crypto from "crypto"
 
 import { prisma } from "@/lib/prisma"
-import { mailer, buildFromAddress } from "@/lib/email"
+import { sendMail, buildFromAddress } from "@/lib/email"
 
 export const runtime = "nodejs"
 
@@ -31,23 +31,21 @@ export async function POST(request: Request) {
   })
 
   if (user) {
-    const token = crypto.randomBytes(32).toString("hex")
-    const tokenHash = crypto.createHash("sha256").update(token).digest("hex")
+    const slug = crypto.randomBytes(24).toString("hex")
     const expiresAt = new Date(Date.now() + TOKEN_TTL_MS)
 
     await prisma.passwordResetToken.create({
       data: {
         userId: user.id,
-        tokenHash,
+        slug,
         expiresAt,
       },
     })
 
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000"
-    const resetUrl = new URL("/auth/reset-password", baseUrl)
-    resetUrl.searchParams.set("token", token)
+    const resetUrl = new URL(`/auth/reset-password/${slug}`, baseUrl)
 
-    await mailer.sendMail({
+    await sendMail({
       from: buildFromAddress(),
       to: user.email || email,
       subject: "Reset your Traveloop password",

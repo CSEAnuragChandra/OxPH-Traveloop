@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -31,10 +31,17 @@ const resetSchema = z
 
 type ResetValues = z.infer<typeof resetSchema>
 
+type ResetParams = {
+  slug?: string | string[]
+}
+
 export default function ResetPasswordPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = useMemo(() => searchParams.get("token"), [searchParams])
+  const params = useParams<ResetParams>()
+  const slug = useMemo(() => {
+    if (!params?.slug) return null
+    return Array.isArray(params.slug) ? params.slug[0] : params.slug
+  }, [params])
 
   const [status, setStatus] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -52,8 +59,8 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true)
     setStatus(null)
 
-    if (!token) {
-      setStatus("Reset token is missing. Please request a new link.")
+    if (!slug) {
+      setStatus("Reset slug is missing. Please request a new link.")
       setIsSubmitting(false)
       return
     }
@@ -62,7 +69,7 @@ export default function ResetPasswordPage() {
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, password: values.password }),
+        body: JSON.stringify({ slug, password: values.password }),
       })
 
       if (!response.ok) {
