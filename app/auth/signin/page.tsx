@@ -109,6 +109,14 @@ export default function SignInPage() {
                   {errors.password.message}
                 </p>
               ) : null}
+              <div className="text-right">
+                <Link
+                  className="text-xs text-muted-foreground hover:text-primary"
+                  href="/auth/forgot-password"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {formError ? (
