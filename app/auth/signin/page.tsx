@@ -53,7 +53,7 @@ export default function SignInPage() {
         email: values.email,
         password: values.password,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: "/home",
       })
 
       if (response?.ok && response.url) {

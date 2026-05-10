@@ -24,6 +24,9 @@ export async function GET(
           activities: { orderBy: { id: "asc" } },
         },
       },
+      expenses: { orderBy: { date: "desc" } },
+      checklist: { orderBy: { id: "asc" } },
+      notes: { orderBy: { date: "desc" }, include: { stop: true } },
       _count: { select: { expenses: true, checklist: true, notes: true } },
     },
   });
