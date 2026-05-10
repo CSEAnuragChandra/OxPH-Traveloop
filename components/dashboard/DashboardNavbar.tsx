@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -113,7 +114,10 @@ export default function DashboardNavbar() {
                       <Settings className="w-4 h-4" /> Settings
                     </Link>
                     <div className="h-px bg-gray-100 my-1"></div>
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
+                    <button 
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                    >
                       <LogOut className="w-4 h-4" /> Sign out
                     </button>
                   </motion.div>

@@ -70,7 +70,7 @@ export default function SignUpPage() {
         email: values.email,
         password: values.password,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: "/home",
       })
 
       if (signInResponse?.ok && signInResponse.url) {

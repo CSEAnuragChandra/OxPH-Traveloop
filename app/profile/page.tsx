@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { MapPin, Calendar, Mail, Phone, Pencil, Lock } from "lucide-react";
-import Navbar from "@/components/Navbar";
+import { signOut } from "next-auth/react";
+import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import { Button } from "@/components/ui/button";
 
 const upcomingTrips = [
@@ -62,7 +63,7 @@ const cardVariants = {
 export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white via-orange-50/40 to-white">
-      <Navbar />
+      <DashboardNavbar />
 
       <section className="relative pt-28 pb-16">
         <div className="absolute inset-0 -z-10">
@@ -132,6 +133,13 @@ export default function ProfilePage() {
                   <Button variant="outline" className="w-full rounded-full">
                     <Lock className="mr-2 h-4 w-4" />
                     Change Password
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full rounded-full text-red-500 hover:text-red-600 hover:bg-red-50"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                  >
+                    Sign Out
                   </Button>
                 </div>
               </div>
